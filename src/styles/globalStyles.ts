@@ -25,4 +25,8 @@ export const GlobalStyles = css`
     height: 100%;
     display: flex;
   }
+
+  li {
+    list-style: none;
+  }
 `
