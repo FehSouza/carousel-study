@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
 import { ItemCarousel } from '..'
 import * as S from './styles'
@@ -6,6 +6,12 @@ import * as S from './styles'
 const itens = [{ text: 'Item 01' }, { text: 'Item 02' }, { text: 'Item 03' }, { text: 'Item 04' }, { text: 'Item 05' }]
 
 const options = { root: null, threshold: 1 }
+
+const totalItens = itens.length
+const lastItem = itens.length - 1
+const itemWidth = 200
+const itemGap = 16
+const itemSizeTotal = itemWidth + itemGap
 
 export const Carousel = () => {
   const [current, setCurrent] = useState(0)
@@ -18,12 +24,6 @@ export const Carousel = () => {
       })
     }, options)
   )
-
-  const totalItens = itens.length
-  const lastItem = itens.length - 1
-  const itemWidth = 200
-  const itemGap = 16
-  const itemSizeTotal = itemWidth + itemGap
 
   const handlePrev = () => {
     if (current === 0) return
@@ -55,6 +55,21 @@ export const Carousel = () => {
       behavior: 'smooth',
     })
   }
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrent((prev) => {
+        boxRef.current?.scrollTo({
+          left: prev === lastItem ? 0 : (prev + 1) * itemSizeTotal,
+          behavior: 'smooth',
+        })
+        return prev + 1
+      })
+    }, 5000)
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [])
 
   return (
     <S.Container>
