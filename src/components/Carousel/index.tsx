@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
 import { ItemCarousel } from '..'
+import { autoPlayId, onAutoPlay } from '../../utils'
 import * as S from './styles'
 
 const itens = [{ text: 'Item 01' }, { text: 'Item 02' }, { text: 'Item 03' }, { text: 'Item 04' }, { text: 'Item 05' }]
@@ -32,6 +33,9 @@ export const Carousel = () => {
       left: boxRef.current.scrollLeft - itemWidth,
       behavior: 'smooth',
     })
+
+    clearInterval(autoPlayId)
+    onAutoPlay({ setCurrent, boxRef, time: 5000, lastItem, itemSizeTotal })
   }
 
   const handleNext = () => {
@@ -41,6 +45,9 @@ export const Carousel = () => {
       left: boxRef.current.scrollLeft + itemWidth,
       behavior: 'smooth',
     })
+
+    clearInterval(autoPlayId)
+    onAutoPlay({ setCurrent, boxRef, time: 5000, lastItem, itemSizeTotal })
   }
 
   const handleClickCard = (i: number) => {
@@ -54,28 +61,25 @@ export const Carousel = () => {
       left: i * itemSizeTotal,
       behavior: 'smooth',
     })
+
+    clearInterval(autoPlayId)
+    onAutoPlay({ setCurrent, boxRef, time: 5000, lastItem, itemSizeTotal })
   }
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrent((prev) => {
-        boxRef.current?.scrollTo({
-          left: prev === lastItem ? 0 : (prev + 1) * itemSizeTotal,
-          behavior: 'smooth',
-        })
-        return prev + 1
-      })
-    }, 5000)
-    return () => {
-      clearInterval(intervalId)
-    }
+    onAutoPlay({ setCurrent, boxRef, time: 5000, lastItem, itemSizeTotal })
+    return () => clearInterval(autoPlayId)
   }, [])
+
+  const handleMouseMove = () => clearInterval(autoPlayId)
+
+  const handleMouseLeave = () => onAutoPlay({ setCurrent, boxRef, time: 5000, lastItem, itemSizeTotal })
 
   return (
     <S.Container>
       {totalItens > 1 && <S.Arrow onClick={handlePrev}>{<MdKeyboardArrowLeft size={24} />}</S.Arrow>}
 
-      <S.Content width={itemWidth} gap={itemGap} ref={boxRef}>
+      <S.Content width={itemWidth} gap={itemGap} ref={boxRef} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
         {itens.map((item, i) => (
           <ItemCarousel key={i} id={i} text={item.text} itemWidth={itemWidth} observer={observer.current} onClick={handleClickCard} />
         ))}
