@@ -10,7 +10,7 @@ Além de transladar manualmente, foi implementado o auto play, que para ao ficar
 
 <img src="./src/assets/images/img-carousel.png">
 
-<hr>
+&nbsp;
 
 ## Tecnologias usadas
 
@@ -18,17 +18,17 @@ Front-end:
 
 Desenvolvido usando: HTML5, Styled Components, React, Typescript
 
-<hr>
+&nbsp;
 
-## Instalando dependências
+## Instalando as dependências
 
 Front-end:
 
 yarn install
 
-<hr>
+&nbsp;
 
-## Executando aplicação
+## Executando a aplicação
 
 Para rodar o Front-end:
 
